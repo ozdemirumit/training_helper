@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Eğitim İlerletici",
+  "version": "1.1.2",
+  "description": "Eğitim penceresini önde tutar ve hazır olan sonraki sayfaya geçer.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://*.myenocta.com/*"],
+  "background": {"service_worker": "background.js"},
+  "action": {"default_title": "Eğitim İlerletici", "default_popup": "popup.html"},
+  "content_scripts": [{"matches": ["https://*.myenocta.com/*"], "js": ["detector.js", "launcher.js", "content.js"], "all_frames": true, "match_about_blank": true}]
+}

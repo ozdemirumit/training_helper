@@ -1,0 +1,4 @@
+/Egitim-Ilerletici/
+/node_modules/
+*.log
+.DS_Store

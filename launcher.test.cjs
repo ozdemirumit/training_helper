@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict');
+require('./launcher.js');
+const L=global.EgitimLauncher;
+for(const text of ['Başla','DEVAM','Devam Et','Eğitime Başla']) assert.equal(L.launchLabel(text),true,text);
+for(const text of ['Başlamadın','Sınava başla','Kaydet','Devam eden eğitimler']) assert.equal(L.launchLabel(text),false,text);
+const element=(attrs={},children=[])=>({getAttribute:key=>attrs[key]||null,querySelectorAll:selector=>selector.startsWith('.material')?[]:children});
+assert.equal(L.locked(element({},[element({class:'fa fa-lock'})])),true);
+assert.equal(L.locked(element({class:'unlocked'})),false);
+assert.equal(L.completed(element({},[element({class:'fa fa-check-circle'})])),true);
+assert.equal(L.completed(element({class:'incomplete'})),false);
+assert.equal(L.name('2.2.Hastalıktan Korunma\n E-Eğitim – min.17 dk'),'2.2.hastalıktan korunma');
+console.log('Launch button, course label, completion and lock checks passed');
