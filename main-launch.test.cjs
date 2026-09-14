@@ -32,5 +32,10 @@ async function scenario(labels, blocked = false, sessionExtra = {}, headingText 
   assert.equal((await scenario(['Başla'],false,{...next,selectedAt:Date.now()})).clicks,0,'wait for new details to load');
   assert.equal((await scenario(['Başla'],false,next,'2.2.Eski eğitim')).clicks,0,'old visible heading must not be launched');
   assert.equal((await scenario(['Başla'],false,next,'2.3.Yeni eğitim')).clicks,1);
+  const finished = {phase:'next',finishedAt:Date.now()-10000,lesson:'2.2.Eski eğitim'};
+  assert.equal((await scenario(['Başla'],false,finished,'2.3.Yeni eğitim')).clicks,1,'new detail page resumes despite missing finished row');
+  assert.equal((await scenario(['Devam'],false,finished,'2.2.Eski eğitim')).clicks,0,'do not reopen completed lesson');
+  assert.equal((await scenario(['Başla'],true,finished,'2.3.Yeni eğitim')).clicks,0,'disabled launch stays blocked');
+  assert.equal((await scenario(['Başla','Devam'],false,finished,'2.3.Yeni eğitim')).clicks,0);
   console.log('Main-page launch without course row checks passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

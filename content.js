@@ -82,8 +82,22 @@
     }
     if (session.phase === 'next') {
       if (Date.now() - session.finishedAt < 5000) { note('Ana sayfanın tamamlanma bilgisini güncellemesi bekleniyor.'); return; }
-      const index = items.findIndex(row => L.name(row.innerText) === session.lesson);
-      if (index < 0) { note('Tamamlanan eğitim satırı bulunamadı. Listeyi açın; gerekirse Durdur ile yeniden başlatın.'); return; }
+        const detailHeading = [...document.querySelectorAll('h1,h2,h3,h4')].find(el => visible(el) && /^\s*\d+(?:\.\d+)+[.\s]/.test(el.innerText || ''));
+        const detailLesson = detailHeading ? L.name(detailHeading.innerText) : '';
+        // The platform (or user) may already have selected the next lesson.
+        // A different identified detail page can launch without locating the old row.
+        if (detailLesson && session.lesson && !L.sameLesson(detailLesson, session.lesson)) {
+          const launchButtons = [...document.querySelectorAll(controls)].filter(el => visible(el) && !disabled(el) &&
+            L.launchLabel(el.innerText || el.value || el.getAttribute('aria-label') || el.title));
+          if (launchButtons.length === 1) {
+            const result = await chrome.runtime.sendMessage({type:'launching', lesson:detailLesson});
+            if (result.ok) { launchButtons[0].click(); note('Yeni eğitim algılandı — popup bekleniyor.'); }
+            return;
+          }
+        }
+        const matches = items.map((row,index) => L.sameLesson(row.innerText,session.lesson) ? index : -1).filter(index => index >= 0);
+        const index = matches.length === 1 ? matches[0] : -1;
+        if (index < 0) { note('Ders listesi güncellenmesi bekleniyor. Yeni eğitimi açarsanız otomatik devam eder; Durdur/Başlat gerekmez.'); return; }
       if (!L.completed(items[index])) { note('Ana listedeki tamamlandı işareti bekleniyor. Minimum süre veya sayfa yenilemesi gerekebilir.'); return; }
       let next = items.slice(index + 1).find(row => !L.completed(row));
       if (!next) { note('Açık listede sıradaki eğitim yok. Diğer konu grubunu açabilirsiniz.'); return; }
@@ -104,7 +118,7 @@
       // The site's enabled launch control is sufficient to open the content.
       // Row identification is optional here; it is needed only for later list navigation.
         const heading = [...document.querySelectorAll('h1,h2,h3,h4')].find(el => visible(el) && /^\s*\d+(?:\.\d+)+[.\s]/.test(el.innerText || ''));
-        if (session.selectedAt && heading && L.name(heading.innerText) !== session.lesson) {
+          if (session.selectedAt && heading && !L.sameLesson(heading.innerText, session.lesson)) {
           note('Yeni eğitimin başlığı yükleniyor — Başla düğmesi bekleniyor.'); return;
         }
         const lesson = session.selectedAt ? session.lesson : heading ? L.name(heading.innerText) : current ? L.name(current.innerText) : session.lesson || '';

@@ -10,3 +10,6 @@ assert.equal(L.completed(element({},[element({class:'fa fa-check-circle'})])),tr
 assert.equal(L.completed(element({class:'incomplete'})),false);
 assert.equal(L.name('2.2.Hastalıktan Korunma\n E-Eğitim – min.17 dk'),'2.2.hastalıktan korunma');
 console.log('Launch button, course label, completion and lock checks passed');
+assert.equal(L.sameLesson('2.2. Ders adı','2.2.Ders adı E-Eğitim – min.17 dk'),true);
+assert.equal(L.sameLesson('2.2.Ders','2.3.Ders'),false);
+assert.equal(L.sameLesson('',''),false);

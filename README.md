@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.3**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.4**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.1.3** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.1.4** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -60,6 +60,10 @@ Sürüm, panelin ve eklenti menüsünün başlığında sürekli görünür. Pop
 İpucu yalnızca fare üzerine gelince oluşturuluyorsa okun üzerinde kısa süre bekleyebilirsiniz. Bulunamazsa **İleri düğmesini seç** kullanın. Yalnızca anlatım bitince etkinleşen gerçek ileri düğmesini seçin. Elle seçilmiş düğme zaten etkinse kısa bekleme sonunda tıklanabilir.
 
 Düğmenin pasiften aktife geçişi, okunabilir sayfa bitiş mesajı veya görünür HTML video/ses öğelerinin bitmesi izlenir. Pasif düğmeye basılmaz. Tıklamalar arasında en az 5 saniye bulunur; aynı etkin durumda sürekli tıklama yapılmaz. “Tıklandı” mesajı platformun geçişi kabul ettiğini garanti etmez.
+
+## Son düzeltme — 1.1.4
+
+Tamamlanan ders satırı bulunamadığında yeni açılmış dersin başlığı ve etkin Başla/Devam düğmesi kontrol edilir; yeni ders tanınırsa durdurup başlatmadan devam edilir. Ders eşleştirmesinde numaralı ders kodları kullanılarak başlık boşlukları ve ek durum metinlerinden kaynaklanan uyuşmazlıklar azaltılır. Eski dersin Devam düğmesi otomatik tekrar açılmaz. Yeni ders de tanınamazsa liste güncellemesi beklenir.
 
 ## Güncelleme
 

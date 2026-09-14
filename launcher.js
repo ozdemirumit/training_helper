@@ -2,6 +2,13 @@
   const normalize = text => (text || '').replace(/İ/g,'i').toLowerCase().replace(/\s+/g,' ').trim();
   const launchLabel = text => /^(?:başla|başlat|devam|devam et|eğitime başla|eğitime devam et)$/.test(normalize(text));
   const name = text => normalize(text).split(/e-eğitim|eğitim\s*[-–]|min\./)[0].trim();
+  function sameLesson(a, b) {
+    const left = name(a), right = name(b);
+    if (!left || !right) return false;
+    const code = text => text.match(/^(\d+(?:\.\d+)+)(?=[.\s]|$)/)?.[1];
+    const x = code(left), y = code(right);
+    return x && y ? x === y : left === right;
+  }
   const marked = (el, pattern) => [el, ...el.querySelectorAll('[class],[title],[aria-label],[data-status]')].some(node =>
     pattern.test([node.getAttribute('class'),node.getAttribute('title'),node.getAttribute('aria-label'),node.getAttribute('data-status')].join(' ')));
   const locked = el => marked(el, /(?:^|[\s_-])(?:lock|locked|kilitli|disabled)(?:$|[\s_-])/i) ||
@@ -19,5 +26,5 @@
     return items.find(el => el.matches('[aria-current="true"],.active,.selected') ||
       headings.some(title => title.length > 8 && name(el.innerText).startsWith(title)));
   }
-  globalThis.EgitimLauncher = {normalize, launchLabel, name, locked, completed, rows, current};
+  globalThis.EgitimLauncher = {normalize, launchLabel, name, sameLesson, locked, completed, rows, current};
 })();
