@@ -37,6 +37,9 @@
       p{margin:0 0 10px}label{display:block;margin:8px 0}button{font:inherit;border:0;border-radius:5px;padding:8px;margin:3px 2px;cursor:pointer;background:#eef5ff;color:#17324d}small{display:block;line-height:1.4;margin-top:8px}
       </style><section><header style="font-weight:600;margin-bottom:10px">Eğitim İlerletici <span data-version style="font-size:12px;white-space:nowrap"></span></header><p role="status"></p><label><input type="checkbox" checked> Pencereyi önde tut</label><div><button data-action="start">Başlat</button><button data-action="stop">Durdur</button><button data-action="selectNext">İleri düğmesini seç</button></div><small>Odak açıkken eğitim yeniden öne gelir. Esc: durdur.</small></section>`;
     root.querySelector('[data-version]').textContent = `v${version}`;
+    const notice = document.createElement('small');
+    notice.textContent = 'Test amaçlıdır. Yalnızca izinli ortamlarda kullanın. Eğitim yükümlülükleri kullanıcıya aittir; garanti verilmez. Ayrıntılar: SORUMLULUK.md.';
+    root.querySelector('section').append(notice);
     if (mainPage) root.querySelector('[data-action="selectNext"]').textContent = 'Mevcut eğitim satırını seç';
     banner = root.querySelector('p');
     focusInput = root.querySelector('input');

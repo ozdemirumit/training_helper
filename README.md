@@ -1,8 +1,10 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde Myenocta eğitimlerinin ana sayfası ve açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.2**.
+Chrome üzerinde Myenocta eğitimlerinin ana sayfası ve açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.3**.
 
 ## İndir
+
+> **Test ve değerlendirme amaçlı deneysel yazılımdır.** Yalnızca izin verilen ortamlarda kullanın. Eğitim yükümlülükleri ve platform kurallarına uyum kullanıcıya aittir; çalışma, ilerleme kaydı veya sertifika garantisi verilmez. Kullanımdan önce [kullanım amacı ve sorumluluk bilgilendirmesini](SORUMLULUK.md) okuyun.
 
 **[Kuruluma hazır ZIP indir](https://github.com/ozdemirumit/training_helper/raw/refs/heads/main/Egitim-Ilerletici.zip)**
 
@@ -18,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.1.2** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız Myenocta sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.1.3** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız Myenocta sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -125,4 +127,6 @@ Bu işlem manifestteki kod dosyalarını ve README'yi `Egitim-Ilerletici.zip` i�
 
 ## Sorumluluk
 
-Bu proje herhangi bir kurumun veya eğitim platformunun resmi uygulaması değildir. Kullanıcı eğitim içeriğini takip etmekten, platform kurallarına uymaktan ve ilerlemenin doğru kaydedildiğini kontrol etmekten sorumludur. Yazılım mevcut haliyle sunulur; kesintisiz çalışma, doğru ilerleme kaydı veya belge/sertifika garantisi verilmez.
+Bu proje herhangi bir kurumun veya eğitim platformunun resmi uygulaması değildir. Test ve değerlendirme amaçlıdır; eğitim içeriğini takip etme veya değerlendirmelere şahsen katılma yükümlülüğünün yerine geçmez. Kullanıcı platform ve kurum kurallarına uyumu, gerekli izinleri ve ilerleme kayıtlarının doğruluğunu kontrol etmelidir.
+
+Yazılım mevcut haliyle sunulur. Mevzuatın izin verdiği ölçüde geliştirici ve katkıda bulunanlar kullanım sonuçları için garanti vermez ve sorumluluk üstlenmez. Kanunen sınırlandırılamayan sorumluluklar ve vazgeçilemeyen haklar saklıdır. Ayrıntılar: [SORUMLULUK.md](SORUMLULUK.md).
