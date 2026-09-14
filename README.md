@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde Myenocta eğitimlerinin ana sayfası ve açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.3**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.3**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.1.3** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız Myenocta sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.1.3** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -85,7 +85,7 @@ Düğmenin pasiften aktife geçişi, okunabilir sayfa bitiş mesajı veya görü
 
 ## Kapsam ve sınırlamalar
 
-- Yalnızca `https://*.myenocta.com/*` sayfalarında çalışır. Farklı alan adındaki içerik çerçeveleri için uyarlama gerekebilir.
+- Yalnızca eklentinin `manifest.json` dosyasında tanımlanmış eğitim alan adlarında çalışır. Tüm eğitim siteleriyle uyumlu değildir; farklı alan adındaki içerik çerçeveleri için uyarlama gerekebilir.
 - Ders süresini hızlandırmaz, kilitleri açmaz veya SCORM tamamlanma kayıtlarını değiştirmez.
 - Sınav yanıtı seçmez. Görünür radyo yanıtlarının bulunduğu çerçevede otomatik ilerleme bekler. Ana listede numaralı E-Eğitim satırları hedeflenir.
 - Canvas içindeki yazılar okunamaz. Bitiş işareti ve düğme farklı iframe'lerdeyse metne dayalı algılama çalışmayabilir.
@@ -95,7 +95,7 @@ Düğmenin pasiften aktife geçişi, okunabilir sayfa bitiş mesajı veya görü
 
 ## İzinler ve gizlilik
 
-`storage` izni yerel ayarlar içindir. Myenocta site erişimi içerik betiklerinin çalışması ve ana sayfa/popup adresi ile açan sekme ilişkisinin eşleştirilmesi için kullanılır.
+`storage` izni yerel ayarlar içindir. Desteklenen eğitim sitesine erişim, içerik betiklerinin çalışması ve ana sayfa/popup adresi ile açan sekme ilişkisinin eşleştirilmesi için kullanılır.
 
 Seçilen düğme/satırın CSS yolu, sayfa alan adı ve yolu `chrome.storage.local` içinde saklanır. Çalışma oturumu, sekme kimlikleri ve ders eşleştirme adı geçici `chrome.storage.session` alanında tutulur. Ders gövdesi, şifre veya sınav yanıtı arşivlenmez. Eklentinin ayrı bir sunucusu, analitik servisi veya dışarıya veri gönderme özelliği yoktur. Normal sayfa düğmelerine basılması platformun kendi isteklerini tetikler.
 
