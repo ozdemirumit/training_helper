@@ -200,13 +200,13 @@
       if (!session?.running || picking) return;
       if (session.role === 'main') { await mainTick(); return; }
       const text = document.body && visible(document.body) ? document.body.innerText : '';
-      if (EgitimDetector.congratulations(text)) {
-        const closeButtons = [...document.querySelectorAll(controls)].filter(el => visible(el) && !disabled(el) && EgitimDetector.closeLabel(el));
+      if (EgitimDetector.congratulations(EgitimDetector.completionText(document, visible))) {
+        const closeButtons = EgitimDetector.closeTargets(document, visible);
         if (closeButtons.length === 1 && !closeClicked) {
           const result = await chrome.runtime.sendMessage({type:'prepareClose'});
-          if (result.ok) { closeClicked = true; closeButtons[0].click(); }
+          if (result.ok) { EgitimDetector.clickClose(closeButtons[0]); closeClicked = true; }
         }
-        report(closeClicked ? 'Kapat tıklandı — oynatıcının kapanışı bekleniyor.' : 'Bölüm tamamlandı — etkin Kapat düğmesi bekleniyor.');
+        report(closeClicked ? 'Kapat tıklaması gönderildi — oynatıcının kapanışı bekleniyor.' : `Bölüm tamamlandı — ${closeButtons.length} etkin Kapat düğmesi bulundu (tek düğme bekleniyor).`);
         return;
       }
       if (EgitimDetector.contentFinished(text)) {

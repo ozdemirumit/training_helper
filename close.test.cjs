@@ -1,0 +1,17 @@
+const assert = require('node:assert/strict');
+global.getComputedStyle=()=>({pointerEvents:'auto'});
+global.window={};
+global.MouseEvent=class {constructor(type,options){this.type=type;Object.assign(this,options);}};
+require('./detector.js');
+const D=global.EgitimDetector;
+let received;
+const group={parentElement:null,className:'',hasAttribute:()=>false,getAttribute:()=>null,contains:()=>false,getBoundingClientRect:()=>({left:10,top:20,width:100,height:40}),dispatchEvent:event=>{received=event;}};
+const label={textContent:'Kapat',title:{baseVal:''},getAttribute:()=>null,closest:selector=>selector==='g'?group:null};
+const nested={...label};
+assert.equal(D.closeLabel(label),true);
+assert.deepEqual(D.closeTargets({querySelectorAll:()=>[label,nested]},()=>true),[group]);
+D.clickClose(group);
+assert.equal(received.type,'click'); assert.equal(received.bubbles,true); assert.equal(received.clientX,60);
+const text = D.completionText({body:{innerText:''},querySelectorAll:()=>[{textContent:'Tebrikler!'},{textContent:'bölümünü tamamladınız.'}]},()=>true);
+assert.equal(D.congratulations(text),true);
+console.log('SVG completion text, duplicate labels and SVG click checks passed');

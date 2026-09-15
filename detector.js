@@ -36,6 +36,26 @@
     .includes('İçerik sona erdi. Bu pencereyi kapatabilirsiniz');
   const congratulations = text => /tebrikler/i.test(text || '') && /bölümünü?\s+tamamladınız/i.test(text || '');
   const closeLabel = el => [el.innerText, el.textContent, el.value, el.getAttribute('aria-label'), el.title]
-    .some(text => (text || '').trim().toLocaleLowerCase('tr-TR') === 'kapat');
-  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel };
+    .some(text => typeof text === 'string' && text.trim().toLocaleLowerCase('tr-TR') === 'kapat');
+  function closeTargets(doc, visible) {
+    const targets = [...doc.querySelectorAll('button,a,[role="button"],input,div,span,svg text,svg tspan,[aria-label]')]
+      .filter(el => visible(el) && closeLabel(el))
+      .map(el => el.closest('button,a,[role="button"],[onclick]') || el.closest('g') || el);
+    const unique = [...new Set(targets)].filter(el => visible(el) && !blocked(el));
+    return unique.filter(el => !unique.some(other => other !== el && other.contains(el)));
+  }
+  function completionText(doc, visible) {
+    const svgText = [...doc.querySelectorAll('svg text,svg [aria-label]')].filter(visible)
+      .map(el => el.textContent || el.getAttribute('aria-label') || '').join(' ');
+    return (doc.body?.innerText || '') + ' ' + svgText;
+  }
+  function clickClose(el) {
+    if (typeof el.click === 'function') { el.click(); return; }
+    // SVG groups have no HTMLElement.click(). Dispatch a bubbling click so
+    // the player's group/delegated handler can receive it.
+    const rect = el.getBoundingClientRect();
+    el.dispatchEvent(new MouseEvent('click', {bubbles:true, cancelable:true, composed:true,
+      view:window, clientX:rect.left+rect.width/2, clientY:rect.top+rect.height/2, button:0}));
+  }
+  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose };
 })();
