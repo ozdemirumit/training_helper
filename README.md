@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.0**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.1**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.2.0** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.2.1** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -48,7 +48,6 @@ Eğitimi kendiniz açıp popup üzerindeki panelden **Başlat** diyebilirsiniz. 
 | Başlat | Bulunduğunuz ana eğitim sayfasında veya popup'ta çalışmayı başlatır. |
 | Durdur / Esc | Ana sayfa ve bağlı popup'taki çalışma oturumunu durdurur. Esc için ilgili sayfa odakta olmalıdır. |
 | Pencereyi önde tut | Eğitim popup'ını öne getirir; başka uygulamaya geçerseniz eğitim yeniden öne gelebilir. |
-| İleri düğmesini seç | Popup'ta ileri oku otomatik bulunamazsa bir kez seçmenizi sağlar. Seçim tıklaması eğitimi ilerletmez. |
 | Mevcut eğitim satırını seç | Ana listedeki ders eşleştirmesine yardımcı olur. Başla/Devam düğmesine basmak için zorunlu değildir. |
 
 Sürüm, panelin ve eklenti menüsünün başlığında sürekli görünür. Popup'ta Chrome araç çubuğu olmasa da sayfa içindeki panel kullanılabilir.
@@ -57,7 +56,7 @@ Sürüm, panelin ve eklenti menüsünün başlığında sürekli görünür. Pop
 
 İleri, İlerle, İlerlet, Sonraki ve Next etiketleri ile düğmenin açıklamaları kontrol edilir. **“İlerlemek için Ctrl + Alt + .”** yazısı fareyle üzerine gelince çıkan bir ipucu olarak değerlendirilir; otomatik klavye kısayolu gönderilmez.
 
-İpucu yalnızca fare üzerine gelince oluşturuluyorsa okun üzerinde kısa süre bekleyebilirsiniz. Bulunamazsa **İleri düğmesini seç** kullanın. Yalnızca anlatım bitince etkinleşen gerçek ileri düğmesini seçin. Elle seçilmiş düğme zaten etkinse kısa bekleme sonunda tıklanabilir.
+İleri düğmesi otomatik bulunur; elle seçim seçeneği yoktur. Önceki sürümlerde kaydedilmiş ileri düğmesi seçimleri kullanılmaz. İpucu yalnızca fare üzerine gelince oluşturuluyorsa okun üzerinde kısa süre bekleyebilirsiniz.
 
 Düğmenin pasiften aktife geçişi, okunabilir sayfa bitiş mesajı veya görünür HTML video/ses öğelerinin bitmesi izlenir. Pasif düğmeye basılmaz. Tıklamalar arasında en az 5 saniye bulunur; aynı etkin durumda sürekli tıklama yapılmaz. “Tıklandı” mesajı platformun geçişi kabul ettiğini garanti etmez.
 
@@ -101,7 +100,7 @@ Elle Kapat seçimi kaldırıldı. Tamamlanma ekranındaki metin, erişilebilirli
 | Başla/Devam bulunamadı | Eğitim ayrıntısını açın. Tek bir görünür ve etkin Başla/Devam düğmesi bulunmalıdır. |
 | Popup açılmadı veya eşleşmedi | Chrome'da bu sitenin açılır pencerelerine izin verin; gerekirse sitenin Başla/Devam düğmesine bir kez elle basın. |
 | Birden fazla eğitim popup'ı açık | Kullanmadıklarınızı kapatın. Yalnızca aynı ana sayfanın açtığı, aynı alan adındaki tek popup devralınır. |
-| İleri düğmesi bulunamadı | İleri oku üzerine fareyi getirin veya panelden düğmeyi seçin. |
+| İleri düğmesi otomatik aranıyor | Sayfanın yüklenmesini bekleyin. İpucunun oluşması için ileri oku üzerine fareyi getirebilirsiniz. |
 | Yeni dersin başlığı yükleniyor | Sayfanın ayrıntılarının güncellenmesini bekleyin. Eski ders başlığı görünürken yeni ders başlatılmaz. |
 | Tamamlandı işareti / kilit bekleniyor | Platformun minimum süre ve tamamlanma koşullarını kontrol edin. Liste güncellenmiyorsa sayfayı yenileyin. |
 | Sıradaki eğitim yok | Diğer konu grubunu açın; tüm dersler bittiyse Durdur'a basın. |

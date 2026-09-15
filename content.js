@@ -42,6 +42,7 @@
     notice.textContent = 'Test amaçlıdır. Yalnızca izinli ortamlarda kullanın. Eğitim yükümlülükleri kullanıcıya aittir; garanti verilmez. Ayrıntılar: SORUMLULUK.md.';
     root.querySelector('section').append(notice);
     if (mainPage) root.querySelector('[data-action="selectNext"]').textContent = 'Mevcut eğitim satırını seç';
+    else root.querySelector('[data-action="selectNext"]').remove();
 
     banner = root.querySelector('p');
     focusInput = root.querySelector('input');
@@ -193,7 +194,7 @@
     if (msg.type === 'refresh') refresh();
     reply({ ok: true });
   });
-  chrome.storage.local.get(key).then(data => { selector = data[key] || ''; });
+  if (mainPage) chrome.storage.local.get(key).then(data => { selector = data[key] || ''; });
   setInterval(async () => {
     if (busy) return;
     busy = true;
@@ -229,7 +230,7 @@
       if (window === window.top && session.focus) await chrome.runtime.sendMessage({ type: 'focus' });
       const next = findNext();
       if (!visible(next)) {
-        if (window !== window.top || !document.querySelector('iframe')) report('İleri düğmesi bulunamadı. İleri düğmesini seç seçeneğini kullanın.');
+        if (window !== window.top || !document.querySelector('iframe')) report('İleri düğmesi otomatik aranıyor; sayfanın yüklenmesi bekleniyor.');
         return;
       }
       const complete = /şimdi sonraki sayfaya ilerleyebilirsiniz/i.test(text);

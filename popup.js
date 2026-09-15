@@ -20,8 +20,4 @@ document.querySelector('#stop').onclick = () => run(async () => {
   await chrome.tabs.sendMessage(tab.id, {type:'command', action:'stop'}, {frameId:0});
   status.textContent = 'Durduruldu';
 });
-document.querySelector('#select').onclick = () => run(async () => {
-  await chrome.tabs.sendMessage(tab.id, { type: 'pick' });
-  window.close();
-});
 init().catch(() => { status.textContent = 'Etkin eğitim penceresi bulunamadı.'; });
