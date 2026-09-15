@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.4**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.3.0**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.2.4** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.3.0** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -91,6 +91,10 @@ Kapat düğmesine tıklanmasına rağmen tamamlanma ekranı 8 saniye daha görü
 ## Oynat düğmesine fare olayları — 1.2.3
 
 Oynat düğmesine pointerdown, mousedown, pointerup, mouseup ve click olayları gönderilir. Bunlar yazılımın oluşturduğu olaylardır; gerçek kullanıcı tıklaması gerektiren tarayıcı kurallarını kaldırmaz. Başlatma isteği 4 saniyede sonuçlanmazsa panel açıklama gösterir; kullanıcı elle oynatınca normal izleme devam eder.
+
+## Kırmızı ileri oklu alt bar — 1.3.0
+
+Süre ve sayfa sayacı bulunan alt barda ileri oku sürekli etkin olsa da erken tıklanmaz. Görünen süre toplam süreye ulaştığında ve okun arka planında kırmızı tamamlanma işareti algılandığında ilerlenir. Yanıp sönmenin kırmızı evresi aynı sayfa için hatırlanır; yeni sayfada sıfırlanır. Ok, sayacın hemen sağındaki tıklanabilir öğeden otomatik bulunmaya çalışılır. Bu algılama okunabilir DOM metni ve CSS rengi gerektirir; canvas veya resim içine çizilmiş bar için ek uyarlama gerekir.
 
 ## Güncelleme
 

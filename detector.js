@@ -111,5 +111,48 @@
     }
     return '';
   }
-  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose, clickPlay, startPlayback };
+  const barStates = new WeakMap();
+  function timerDone(text) {
+    const match = (text || '').match(/(\d{1,2}:\d{2}(?::\d{2})?)\s*\/\s*(\d{1,2}:\d{2}(?::\d{2})?)/);
+    const seconds = value => value.split(':').reduce((sum,n)=>sum*60+Number(n),0);
+    return !!match && seconds(match[2]) > 0 && seconds(match[1]) >= seconds(match[2]);
+  }
+  function redColor(value) {
+    const parts = (value || '').match(/[\d.]+/g)?.map(Number);
+    return !!parts && parts.length >= 3 && (parts.length < 4 || parts[3] > .2) && parts[0] > 150 && parts[0] > parts[1]*1.5 && parts[0] > parts[2]*1.2;
+  }
+  function barInfo(next) {
+    for (let bar=next.parentElement,depth=0; bar && depth<6; bar=bar.parentElement,depth++) {
+      const text=bar.innerText || '';
+      if (text.length>700) break;
+      if (/\d+:\d+\s*\/\s*\d+:\d+/.test(text) && /(?:^|\s)\d+\s*\/\s*\d+(?:\s|$)/.test(text)) return bar;
+    }
+    return null;
+  }
+  function barReady(next,bar) {
+    const text=bar.innerText || '';
+    const page=text.match(/(?:^|\s)(\d+\s*\/\s*\d+)(?:\s|$)/)?.[1] || '';
+    let state=barStates.get(next);
+    if (!state || state.page!==page || !timerDone(text)) state={page,red:false};
+    for(let node=next;node && node!==bar;node=node.parentElement) {
+      const style=getComputedStyle(node);
+      if(redColor(style.backgroundColor)) state.red=true;
+    }
+    barStates.set(next,state);
+    return timerDone(text) && state.red;
+  }
+  function findBarNext(doc,visible) {
+    const counters=[...doc.querySelectorAll('span,div,p')].filter(el=>visible(el) && /^\s*\d+\s*\/\s*\d+\s*$/.test(el.textContent || ''));
+    for(const counter of counters) {
+      const box=counter.getBoundingClientRect();
+      const candidates=[...doc.querySelectorAll('button,a,[role="button"],[tabindex]')].filter(el=>{
+        if(!visible(el)) return false;
+        const rect=el.getBoundingClientRect();
+        return rect.left>=box.right-2 && rect.left-box.right<90 && Math.abs((rect.top+rect.height/2)-(box.top+box.height/2))<20 && rect.width<100;
+      });
+      if(candidates.length===1 && barInfo(candidates[0])) return candidates[0];
+    }
+    return null;
+  }
+  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose, clickPlay, startPlayback, timerDone, redColor, barInfo, barReady, findBarNext };
 })();
