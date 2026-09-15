@@ -57,5 +57,26 @@
     el.dispatchEvent(new MouseEvent('click', {bubbles:true, cancelable:true, composed:true,
       view:window, clientX:rect.left+rect.width/2, clientY:rect.top+rect.height/2, button:0}));
   }
-  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose };
+  const mediaAttempts = new WeakSet();
+  const overlayAttempts = new WeakSet();
+  async function startPlayback(doc, visible) {
+    const media = [...doc.querySelectorAll('video,audio')].filter(visible);
+    if (media.some(el => !el.paused && !el.ended)) return '';
+    const overlays = [...doc.querySelectorAll('.vjs-big-play-button,.mejs__overlay-button,.mejs-overlay-button,.plyr__control--overlaid,[data-plyr="play"],button,[role="button"]')]
+      .filter(el => visible(el) && !blocked(el) && (el.matches('.vjs-big-play-button,.mejs__overlay-button,.mejs-overlay-button,.plyr__control--overlaid') ||
+        [el.getAttribute('aria-label'),el.getAttribute('title'),el.textContent].some(text => /^(play|play video|start playback|oynat|videoyu oynat|oynatmayı başlat)$/i.test((text || '').trim()))));
+    if (media.some(el => el.currentTime > 0 || el.ended)) return ''; // Respect an intentional pause; never replay finished media.
+    if (overlays.length === 1 && !overlayAttempts.has(overlays[0])) {
+      overlayAttempts.add(overlays[0]); clickClose(overlays[0]);
+      return 'Oynat düğmesine basıldı — oynatmanın başlaması bekleniyor.';
+    }
+    for (const el of media) {
+      if (mediaAttempts.has(el)) continue;
+      mediaAttempts.add(el);
+      try { await el.play(); return 'Eğitim videosu başlatıldı.'; }
+      catch { return 'Otomatik oynatma engellendi veya video yüklenemedi. Ortadaki Oynat düğmesine bir kez basın.'; }
+    }
+    return '';
+  }
+  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose, startPlayback };
 })();

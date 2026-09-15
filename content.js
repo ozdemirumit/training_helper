@@ -219,6 +219,8 @@
         return;
       }
       finishSince = 0;
+      const playbackStatus = await EgitimDetector.startPlayback(document, visible);
+      if (playbackStatus) { report(playbackStatus); return; }
       if (window === window.top && session.focus) await chrome.runtime.sendMessage({ type: 'focus' });
       const next = findNext();
       if (!visible(next)) {

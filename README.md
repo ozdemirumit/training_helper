@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.7**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.8**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.1.7** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.1.8** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -76,6 +76,10 @@ Başla/Devam düğmesinin bulunduğu ders kartındaki numaralı başlık, h1–h
 ## SVG kapanış desteği — 1.1.7
 
 Tamamlanma ekranındaki SVG yazıları ve özel Kapat öğeleri de aranır. SVG gruplarına tıklama olayı gönderilir; panel bulunan etkin Kapat düğmesi sayısını gösterir. Canvas içine çizilmiş yazılar ve gerçek fare girdisi gerektiren oynatıcılar için ek uyarlama gerekebilir.
+
+## Oynatma ekranları — 1.1.8
+
+Eğitim popup'ındaki bilinen büyük Oynat düğmeleri ve henüz başlamamış HTML video/ses öğeleri otomatik başlatılmaya çalışılır. Bitmiş içerik yeniden oynatılmaz; başlamış videonun elle duraklatılması korunur. Tarayıcı otomatik oynatmayı engellerse veya düğme canvas içinde çizilmişse elle bir kez Oynat'a basmanız gerekebilir.
 
 ## Güncelleme
 
