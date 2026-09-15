@@ -7,6 +7,7 @@
   let previousComplete = false, previousEnded = false, lastStatus = '';
   let finishSince = 0;
   let closeClicked = false;
+  let closeSentAt = 0;
   let banner, panel, focusInput;
   const key = `next:${location.origin}${location.pathname}`;
   const visible = el => !!el && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
@@ -66,7 +67,7 @@
     const wasRunning = session?.running;
     session = result.session;
     if (focusInput && session) focusInput.checked = session.focus;
-    if (!session?.running) { gate = { armed: false, latched: false, lastClick: 0, readySince: 0 }; finishSince = 0; closeClicked = false; }
+    if (!session?.running) { gate = { armed: false, latched: false, lastClick: 0, readySince: 0 }; finishSince = 0; closeClicked = false; closeSentAt = 0; }
     if (!wasRunning && session?.running) { gate.lastClick = Date.now(); report('Çalışıyor — ileri düğmesi kontrol ediliyor.'); }
     if (window === window.top && !picking && !session?.running) note('Durdu');
   }
@@ -209,10 +210,16 @@
           const result = await chrome.runtime.sendMessage({type:'prepareClose'});
           if (result.ok) {
             EgitimDetector.clickClose(closeButtons[0]);
-            closeClicked = true;
+            closeClicked = true; closeSentAt = Date.now();
           }
         }
-        report(closeClicked ? 'Kapat tıklaması gönderildi — oynatıcının kapanışı bekleniyor.' : `Bölüm tamamlandı — ${closeButtons.length} etkin Kapat bulundu; otomatik aranıyor.`);
+        if (closeClicked && Date.now() - closeSentAt >= 8000) {
+          report('Kapat düğmesi yanıt vermedi — tamamlanan eğitim sekmesi kapatılıyor.');
+          const result = await chrome.runtime.sendMessage({type:'contentFinished'});
+          if (result?.error) report('Eğitim sekmesi kapatılamadı: ' + result.error);
+          return;
+        }
+        report(closeClicked ? 'Kapat tıklandı — 8 saniye içinde kapanmazsa eğitim sekmesi kapatılacak. Esc: iptal' : `Bölüm tamamlandı — ${closeButtons.length} etkin Kapat bulundu; otomatik aranıyor.`);
         return;
       }
       if (EgitimDetector.contentFinished(text)) {

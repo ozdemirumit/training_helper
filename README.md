@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.1**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.2**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.2.1** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.2.2** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -83,6 +83,10 @@ Eğitim popup'ındaki bilinen büyük Oynat düğmeleri ve henüz başlamamış 
 ## Otomatik Kapat algılama — 1.2.0
 
 Elle Kapat seçimi kaldırıldı. Tamamlanma ekranındaki metin, erişilebilirlik etiketleri, özel oynatıcı öğeleri ve açık shadow DOM içeriği otomatik aranır. Fare olaylarını almayan metnin tıklanabilir üst öğesi hedeflenir. Canvas içine çizilmiş ve DOM içinde etiketi bulunmayan düğmeler bu yöntemle tanınamayabilir.
+
+## Kapanış yedeği — 1.2.2
+
+Kapat düğmesine tıklanmasına rağmen tamamlanma ekranı 8 saniye daha görünür kalırsa yalnızca aktif eğitim sekmesi kapatılır; bağlı ana sayfada sonraki ders akışı devam eder. Durdur veya Esc ile işlem iptal edilir. Bu yedek işlem oynatıcının kapanış kaydının başarıyla işlendiğini doğrulamaz; ana listedeki tamamlandı bilgisi ayrıca kontrol edilir.
 
 ## Güncelleme
 
