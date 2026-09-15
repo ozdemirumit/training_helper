@@ -54,3 +54,7 @@ assert.equal(global.EgitimDetector.contentFinished('İçerik sona erdi.\n Bu pen
 assert.equal(global.EgitimDetector.contentFinished('İçerik sona erdi.'), false);
 assert.equal(global.EgitimDetector.contentFinished('Şimdi sonraki sayfaya ilerleyebilirsiniz.'), false);
 console.log('End-of-content message checks passed');
+assert.equal(global.EgitimDetector.congratulations('Tebrikler! Kimyasal Riskler bölümünü tamamladınız.'),true);
+assert.equal(global.EgitimDetector.congratulations('Tebrikler!'),false);
+assert.equal(global.EgitimDetector.closeLabel(element({text:'Kapat'})),true);
+assert.equal(global.EgitimDetector.closeLabel(element({text:'Yeniden İzle'})),false);

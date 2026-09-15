@@ -31,5 +31,8 @@ const send=(type,id=1,extra={})=>new Promise(resolve=>listener({type,...extra},{
  await send('start',1,{focus:true});
  const result=await send('launching',1,{lesson:'2.3.test'}); assert.equal(result.ok,false,'existing popup prevents another launch click');
  assert.equal(session.tabId,43);
+ await send('prepareClose',43); onRemoved(43); await send('state',1);
+ assert.equal(session.phase,'next','player close resumes main workflow');
+ assert.equal(session.tabId,1);
  console.log('Main/popup handoff, unrelated popup, completion, next lesson, stop and duplicate launch checks passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

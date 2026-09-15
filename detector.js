@@ -34,5 +34,8 @@
   }
   const contentFinished = text => (text || '').replace(/\s+/g, ' ').trim()
     .includes('İçerik sona erdi. Bu pencereyi kapatabilirsiniz');
-  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished };
+  const congratulations = text => /tebrikler/i.test(text || '') && /bölümünü?\s+tamamladınız/i.test(text || '');
+  const closeLabel = el => [el.innerText, el.textContent, el.value, el.getAttribute('aria-label'), el.title]
+    .some(text => (text || '').trim().toLocaleLowerCase('tr-TR') === 'kapat');
+  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel };
 })();

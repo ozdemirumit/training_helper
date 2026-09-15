@@ -29,7 +29,7 @@ async function handle(msg, sender) {
     return {session: session && [session.tabId, session.mainTabId].includes(id) ? {...session, role:id === session.mainTabId ? 'main' : 'player'} : null};
   }
   if (msg.type === 'launching' && session?.running && id === session.mainTabId && ['launch','next'].includes(session.phase)) {
-    session = {...session, phase:'opening', launchAt:Date.now(), lesson:msg.lesson || session.lesson || '', tabId:id};
+    session = {...session, phase:'opening', closingByPlayer:false, launchAt:Date.now(), lesson:msg.lesson || session.lesson || '', tabId:id};
     await chrome.storage.session.set({session});
     session = await adopt(session);
     return {ok:session.phase === 'opening'};
@@ -49,6 +49,10 @@ async function handle(msg, sender) {
       await notifyTab(mainTabId, {type:'refresh'});
     }
     return {closed:true};
+  }
+  if (msg.type === 'prepareClose' && session?.running && id === session.tabId && session.phase === 'player') {
+    await chrome.storage.session.set({session:{...session, closingByPlayer:true}});
+    return {ok:true};
   }
   if (msg.type === 'stop' && session && [session.tabId, session.mainTabId].includes(id)) {
     await chrome.storage.session.remove('session');
@@ -73,6 +77,14 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
 chrome.tabs.onRemoved.addListener(tabId => {
   queue = queue.then(async () => {
     const {session} = await chrome.storage.session.get('session');
+    if (session?.running && session.closingByPlayer && session.tabId === tabId && session.mainTabId != null) {
+      const mainTabId = session.mainTabId;
+      await chrome.storage.session.set({session:{...session, tabId:mainTabId, phase:'next', finishedAt:Date.now(), closingByPlayer:false}});
+      const parent = await chrome.tabs.update(mainTabId,{active:true});
+      if (session.focus) await chrome.windows.update(parent.windowId,{focused:true});
+      await notifyTab(mainTabId,{type:'refresh'});
+      return;
+    }
     if (session && [session.tabId, session.mainTabId].includes(tabId)) {
       await chrome.storage.session.remove('session');
       await notifyTab(session.mainTabId, {type:'refresh'});

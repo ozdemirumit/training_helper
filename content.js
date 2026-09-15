@@ -6,6 +6,7 @@
   let gate = { armed: false, latched: false, lastClick: 0, readySince: 0 }, busy = false;
   let previousComplete = false, previousEnded = false, lastStatus = '';
   let finishSince = 0;
+  let closeClicked = false;
   let banner, panel, focusInput;
   const key = `next:${location.origin}${location.pathname}`;
   const visible = el => !!el && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
@@ -63,7 +64,7 @@
     const wasRunning = session?.running;
     session = result.session;
     if (focusInput && session) focusInput.checked = session.focus;
-    if (!session?.running) { gate = { armed: false, latched: false, lastClick: 0, readySince: 0 }; finishSince = 0; }
+    if (!session?.running) { gate = { armed: false, latched: false, lastClick: 0, readySince: 0 }; finishSince = 0; closeClicked = false; }
     if (!wasRunning && session?.running) { gate.lastClick = Date.now(); report('Çalışıyor — ileri düğmesi kontrol ediliyor.'); }
     if (window === window.top && !picking && !session?.running) note('Durdu');
   }
@@ -200,6 +201,15 @@
       if (!session?.running || picking) return;
       if (session.role === 'main') { await mainTick(); return; }
       const text = document.body && visible(document.body) ? document.body.innerText : '';
+      if (EgitimDetector.congratulations(text)) {
+        const closeButtons = [...document.querySelectorAll(controls)].filter(el => visible(el) && !disabled(el) && EgitimDetector.closeLabel(el));
+        if (closeButtons.length === 1 && !closeClicked) {
+          const result = await chrome.runtime.sendMessage({type:'prepareClose'});
+          if (result.ok) { closeClicked = true; closeButtons[0].click(); }
+        }
+        report(closeClicked ? 'Kapat tıklandı — oynatıcının kapanışı bekleniyor.' : 'Bölüm tamamlandı — etkin Kapat düğmesi bekleniyor.');
+        return;
+      }
       if (EgitimDetector.contentFinished(text)) {
         if (!finishSince) finishSince = Date.now();
         report('Eğitim bitti — pencere kapatılıyor. Esc: iptal');
