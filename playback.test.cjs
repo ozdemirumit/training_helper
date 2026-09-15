@@ -11,6 +11,6 @@ const start=global.EgitimDetector.startPlayback;
  await start({querySelectorAll:selector=>selector==='video,audio'?[paused]:[]},()=>true);
  assert.equal(calls,1,'user pause respected');
  const rejected={...video,async play(){throw new Error('NotAllowedError');}};
- assert.match(await start({querySelectorAll:selector=>selector==='video,audio'?[rejected]:[]},()=>true),/engellendi/);
+ assert.match(await start({querySelectorAll:selector=>selector==='video,audio'?[rejected]:[]},()=>true),/Oynatma başlamadı/);
  console.log('Playback start, single attempt, intentional pause and rejection checks passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});
