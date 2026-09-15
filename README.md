@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.3**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.4**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.2.3** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.2.4** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım

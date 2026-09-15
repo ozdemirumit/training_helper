@@ -35,13 +35,19 @@
     panel.style.cssText = 'position:fixed!important;top:8px!important;right:8px!important;z-index:2147483647!important;display:block!important';
     const root = panel.attachShadow({ mode: 'closed' });
     root.innerHTML = `<style>
-      :host{all:initial}section{width:265px;background:#17324d;color:white;padding:12px;border-radius:10px;font:13px system-ui;box-shadow:0 3px 16px #0004}
-      p{margin:0 0 10px}label{display:block;margin:8px 0}button{font:inherit;border:0;border-radius:5px;padding:8px;margin:3px 2px;cursor:pointer;background:#eef5ff;color:#17324d}small{display:block;line-height:1.4;margin-top:8px}
+      :host{all:initial}section{box-sizing:border-box;width:420px;max-width:calc(100vw - 16px);background:#17324d;color:white;padding:9px 11px;border-radius:8px;font:12px system-ui;box-shadow:0 3px 12px #0003;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+      header{flex:1 1 auto;margin:0!important;font-size:12px}p{flex-basis:100%;margin:0;line-height:1.35;order:3}label{display:flex;align-items:center;gap:3px;margin:0;font-size:11px}section>div{display:flex;gap:4px;align-items:center}button{font:inherit;border:0;border-radius:5px;padding:5px 8px;margin:0;cursor:pointer;background:#eef5ff;color:#17324d}small{display:block;line-height:1.4;margin-top:5px}details{order:4;flex-basis:100%;font-size:10px}summary{cursor:pointer;opacity:.85}details small{font-size:10px}
       </style><section><header style="font-weight:600;margin-bottom:10px">Eğitim İlerletici <span data-version style="font-size:12px;white-space:nowrap"></span></header><p role="status"></p><label><input type="checkbox" checked> Pencereyi önde tut</label><div><button data-action="start">Başlat</button><button data-action="stop">Durdur</button><button data-action="selectNext">İleri düğmesini seç</button></div><small>Odak açıkken eğitim yeniden öne gelir. Esc: durdur.</small></section>`;
     root.querySelector('[data-version]').textContent = `v${version}`;
     const notice = document.createElement('small');
     notice.textContent = 'Test amaçlıdır. Yalnızca izinli ortamlarda kullanın. Eğitim yükümlülükleri kullanıcıya aittir; garanti verilmez. Ayrıntılar: SORUMLULUK.md.';
     root.querySelector('section').append(notice);
+    const info = document.createElement('details');
+    const summary = document.createElement('summary');
+    summary.textContent = 'Bilgi · Esc: durdur';
+    info.append(summary);
+    for (const small of [...root.querySelectorAll('section > small')]) info.append(small);
+    root.querySelector('section').append(info);
     if (mainPage) root.querySelector('[data-action="selectNext"]').textContent = 'Mevcut eğitim satırını seç';
     else root.querySelector('[data-action="selectNext"]').remove();
 
