@@ -83,13 +83,12 @@
     }
     if (session.phase === 'next') {
       if (Date.now() - session.finishedAt < 5000) { note('Ana sayfanın tamamlanma bilgisini güncellemesi bekleniyor.'); return; }
-        const detailHeading = [...document.querySelectorAll('h1,h2,h3,h4')].find(el => visible(el) && /^\s*\d+(?:\.\d+)+[.\s]/.test(el.innerText || ''));
-        const detailLesson = detailHeading ? L.name(detailHeading.innerText) : '';
+          const launchButtons = [...document.querySelectorAll(controls)].filter(el => visible(el) && !disabled(el) &&
+            L.launchLabel(el.innerText || el.value || el.getAttribute('aria-label') || el.title));
+          const detailLesson = launchButtons.length === 1 ? L.detail(launchButtons[0],document,visible) : '';
         // The platform (or user) may already have selected the next lesson.
         // A different identified detail page can launch without locating the old row.
         if (detailLesson && session.lesson && !L.sameLesson(detailLesson, session.lesson)) {
-          const launchButtons = [...document.querySelectorAll(controls)].filter(el => visible(el) && !disabled(el) &&
-            L.launchLabel(el.innerText || el.value || el.getAttribute('aria-label') || el.title));
           if (launchButtons.length === 1) {
             const result = await chrome.runtime.sendMessage({type:'launching', lesson:detailLesson});
             if (result.ok) { launchButtons[0].click(); note('Yeni eğitim algılandı — popup bekleniyor.'); }
@@ -118,11 +117,11 @@
       if (buttons.length !== 1) { note('Tek bir Başla/Devam düğmesi bulunamadı. Eğitim ayrıntısını açın.'); return; }
       // The site's enabled launch control is sufficient to open the content.
       // Row identification is optional here; it is needed only for later list navigation.
-        const heading = [...document.querySelectorAll('h1,h2,h3,h4')].find(el => visible(el) && /^\s*\d+(?:\.\d+)+[.\s]/.test(el.innerText || ''));
-          if (session.selectedAt && heading && !L.sameLesson(heading.innerText, session.lesson)) {
+          const detailLesson = L.detail(buttons[0],document,visible);
+            if (session.selectedAt && detailLesson && !L.sameLesson(detailLesson, session.lesson)) {
           note('Yeni eğitimin başlığı yükleniyor — Başla düğmesi bekleniyor.'); return;
         }
-        const lesson = session.selectedAt ? session.lesson : heading ? L.name(heading.innerText) : current ? L.name(current.innerText) : session.lesson || '';
+          const lesson = session.selectedAt ? session.lesson : detailLesson || (current ? L.name(current.innerText) : session.lesson || '');
       const result = await chrome.runtime.sendMessage({type:'launching', lesson});
     if (result.ok) { buttons[0].click(); note('Başla/Devam tıklandı — popup bekleniyor.'); }
   }

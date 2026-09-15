@@ -5,9 +5,10 @@ require('./launcher.js');
 const source = fs.readFileSync('content.js', 'utf8');
 const start = source.indexOf('  async function mainTick()');
 const end = source.indexOf('  function findNext()', start);
-async function scenario(labels, blocked = false, sessionExtra = {}, headingText = '') {
+async function scenario(labels, blocked = false, sessionExtra = {}, headingText = '', cardTitle = '') {
   let clicks = 0, messages = [];
   const buttons = labels.map(innerText => ({innerText, click(){clicks++;}}));
+  if (cardTitle) buttons.forEach(button => {button.parentElement = {parentElement:null,querySelectorAll:()=>[{innerText:cardTitle}]};});
   const win = {}; win.top = win;
   const context = {window:win, session:{phase:'launch',...sessionExtra}, selector:'', controls:'button',
     L:{...global.EgitimLauncher, rows:()=>[], current:()=>null},
@@ -37,5 +38,7 @@ async function scenario(labels, blocked = false, sessionExtra = {}, headingText 
   assert.equal((await scenario(['Devam'],false,finished,'2.2.Eski eğitim')).clicks,0,'do not reopen completed lesson');
   assert.equal((await scenario(['Başla'],true,finished,'2.3.Yeni eğitim')).clicks,0,'disabled launch stays blocked');
   assert.equal((await scenario(['Başla','Devam'],false,finished,'2.3.Yeni eğitim')).clicks,0);
+  assert.equal((await scenario(['BAŞLA'],false,finished,'','3.2.Elle Kaldırma ve Taşıma (Az Tehlikeli)')).clicks,1,'card title without heading element must launch');
+  assert.equal((await scenario(['DEVAM'],false,finished,'','2.2.Eski eğitim')).clicks,0,'same card must not relaunch');
   console.log('Main-page launch without course row checks passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

@@ -26,5 +26,19 @@
     return items.find(el => el.matches('[aria-current="true"],.active,.selected') ||
       headings.some(title => title.length > 8 && name(el.innerText).startsWith(title)));
   }
-  globalThis.EgitimLauncher = {normalize, launchLabel, name, sameLesson, locked, completed, rows, current};
+  function detail(button, doc, visible) {
+    // Read the course card surrounding the launch control, regardless of the
+    // HTML tag used for its title. Never pick a title from the adjacent list.
+    for (let parent = button?.parentElement; parent && parent !== doc.body; parent = parent.parentElement) {
+      const titles = [...parent.querySelectorAll('h1,h2,h3,h4,h5,h6,div,span,strong,p')]
+        .filter(el => visible(el) && /^\s*\d+(?:\.\d+)+[.\s]/.test(el.innerText || '') && (el.innerText || '').length < 350)
+        .map(el => name(el.innerText));
+      const unique = titles.filter((title,index) => !titles.slice(0,index).some(other => sameLesson(other,title)));
+      if (unique.length === 1) return unique[0];
+      if (unique.length > 1) break;
+    }
+    const headings = [...doc.querySelectorAll('h1,h2,h3,h4,h5,h6')].filter(el => visible(el) && /^\s*\d+(?:\.\d+)+[.\s]/.test(el.innerText || ''));
+    return headings.length === 1 ? name(headings[0].innerText) : '';
+  }
+  globalThis.EgitimLauncher = {normalize, launchLabel, name, sameLesson, locked, completed, rows, current, detail};
 })();
