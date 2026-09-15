@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.1.9**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.2.0**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.1.9** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.2.0** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -81,9 +81,9 @@ Tamamlanma ekranındaki SVG yazıları ve özel Kapat öğeleri de aranır. SVG 
 
 Eğitim popup'ındaki bilinen büyük Oynat düğmeleri ve henüz başlamamış HTML video/ses öğeleri otomatik başlatılmaya çalışılır. Bitmiş içerik yeniden oynatılmaz; başlamış videonun elle duraklatılması korunur. Tarayıcı otomatik oynatmayı engellerse veya düğme canvas içinde çizilmişse elle bir kez Oynat'a basmanız gerekebilir.
 
-## Özel Kapat seçimi — 1.1.9
+## Otomatik Kapat algılama — 1.2.0
 
-Tamamlanma ekranı tanınıyor ancak Kapat düğmesi bulunamıyorsa popup panelindeki **Kapat düğmesini seç** ile ekrandaki Kapat'a tıklayın. Seçilen öğe ve öğe içindeki göreli tıklama noktası yerel olarak saklanır; yalnızca tamamlanma ekranı algılandığında kullanılır. Yeniden İzle düğmesini seçmeyin. Oynatıcı gerçek fare girdisi gerektiriyorsa otomatik tıklama yine kabul edilmeyebilir.
+Elle Kapat seçimi kaldırıldı. Tamamlanma ekranındaki metin, erişilebilirlik etiketleri, özel oynatıcı öğeleri ve açık shadow DOM içeriği otomatik aranır. Fare olaylarını almayan metnin tıklanabilir üst öğesi hedeflenir. Canvas içine çizilmiş ve DOM içinde etiketi bulunmayan düğmeler bu yöntemle tanınamayabilir.
 
 ## Güncelleme
 

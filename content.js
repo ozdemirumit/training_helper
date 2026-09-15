@@ -7,7 +7,6 @@
   let previousComplete = false, previousEnded = false, lastStatus = '';
   let finishSince = 0;
   let closeClicked = false;
-  let pickClose = false, closeSelection = null;
   let banner, panel, focusInput;
   const key = `next:${location.origin}${location.pathname}`;
   const visible = el => !!el && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
@@ -43,11 +42,7 @@
     notice.textContent = 'Test amaçlıdır. Yalnızca izinli ortamlarda kullanın. Eğitim yükümlülükleri kullanıcıya aittir; garanti verilmez. Ayrıntılar: SORUMLULUK.md.';
     root.querySelector('section').append(notice);
     if (mainPage) root.querySelector('[data-action="selectNext"]').textContent = 'Mevcut eğitim satırını seç';
-    else {
-      const closePicker = document.createElement('button');
-      closePicker.dataset.action = 'selectClose'; closePicker.textContent = 'Kapat düğmesini seç';
-      root.querySelector('[data-action="selectNext"]').after(closePicker);
-    }
+
     banner = root.querySelector('p');
     focusInput = root.querySelector('input');
     root.addEventListener('click', async event => {
@@ -172,16 +167,7 @@
     if (event.target === panel) return;
     if (!picking) return;
     event.preventDefault(); event.stopImmediatePropagation();
-    if (pickClose) {
-      const target = actionable(event.target);
-      const rect = target.getBoundingClientRect();
-      closeSelection = {selector:path(target), x:(event.clientX-rect.left)/rect.width, y:(event.clientY-rect.top)/rect.height};
-      picking = false; pickClose = false; closeClicked = false;
-      await chrome.storage.local.set({[key + ':close']:closeSelection});
-      await chrome.runtime.sendMessage({type:'picked'});
-      note('Kapat seçildi. Otomasyon çalışırken tamamlanma ekranında kullanılacak.');
-      return;
-    }
+
     chosen = mainPage ? L.rows(document).find(row => row.contains(event.target)) || actionable(event.target) : actionable(event.target);
     selector = path(chosen); picking = false;
     gate = { armed: disabled(chosen), latched: false, lastClick: Date.now(), readySince: 0 };
@@ -204,13 +190,10 @@
     if (msg.type === 'progress' && window === window.top && session?.running && !picking) note(msg.text);
     if (msg.type === 'cancelPick') { picking = false; if (panel) note('Düğme seçimi kapandı. Başlat ile devam edebilirsiniz.'); else { if (banner) banner.remove(); banner = null; } }
     if (msg.type === 'pick') { picking = true; note(mainPage ? 'Listede şu an açık eğitimin satırına tıklayın. Esc: iptal' : 'Sağ alttaki sonraki sayfa düğmesine tıklayın. Esc: iptal'); }
-    if (msg.type === 'pickClose') { picking = true; pickClose = true; note('Ekrandaki Kapat düğmesine tıklayın. Esc: iptal'); }
-    if (msg.type === 'pick' || msg.type === 'cancelPick') pickClose = false;
     if (msg.type === 'refresh') refresh();
     reply({ ok: true });
   });
   chrome.storage.local.get(key).then(data => { selector = data[key] || ''; });
-  chrome.storage.local.get(key + ':close').then(data => { closeSelection = data[key + ':close'] || null; });
   setInterval(async () => {
     if (busy) return;
     busy = true;
@@ -220,22 +203,15 @@
       if (session.role === 'main') { await mainTick(); return; }
       const text = document.body && visible(document.body) ? document.body.innerText : '';
       if (EgitimDetector.congratulations(EgitimDetector.completionText(document, visible))) {
-        let selectedClose = null;
-        if (closeSelection) { try { selectedClose = document.querySelector(closeSelection.selector); } catch {} }
-        if (!visible(selectedClose) || (selectedClose && disabled(selectedClose))) selectedClose = null;
-        const closeButtons = selectedClose ? [selectedClose] : EgitimDetector.closeTargets(document, visible);
+        const closeButtons = EgitimDetector.closeTargets(document, visible);
         if (closeButtons.length === 1 && !closeClicked) {
           const result = await chrome.runtime.sendMessage({type:'prepareClose'});
           if (result.ok) {
-            if (selectedClose) {
-              const rect = selectedClose.getBoundingClientRect();
-              selectedClose.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,composed:true,view:window,button:0,
-                clientX:rect.left+rect.width*closeSelection.x,clientY:rect.top+rect.height*closeSelection.y}));
-            } else EgitimDetector.clickClose(closeButtons[0]);
+            EgitimDetector.clickClose(closeButtons[0]);
             closeClicked = true;
           }
         }
-        report(closeClicked ? 'Kapat tıklaması gönderildi — oynatıcının kapanışı bekleniyor.' : `Bölüm tamamlandı — ${closeButtons.length} Kapat bulundu. Bulunamadıysa panelden Kapat düğmesini seçin.`);
+        report(closeClicked ? 'Kapat tıklaması gönderildi — oynatıcının kapanışı bekleniyor.' : `Bölüm tamamlandı — ${closeButtons.length} etkin Kapat bulundu; otomatik aranıyor.`);
         return;
       }
       if (EgitimDetector.contentFinished(text)) {

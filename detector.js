@@ -35,12 +35,22 @@
   const contentFinished = text => (text || '').replace(/\s+/g, ' ').trim()
     .includes('İçerik sona erdi. Bu pencereyi kapatabilirsiniz');
   const congratulations = text => /tebrikler/i.test(text || '') && /bölümünü?\s+tamamladınız/i.test(text || '');
-  const closeLabel = el => [el.innerText, el.textContent, el.value, el.getAttribute('aria-label'), el.title]
+  const closeLabel = el => [el.innerText, el.textContent, el.value, el.getAttribute('aria-label'), el.getAttribute('data-acc-text'), el.getAttribute('data-label'), el.getAttribute('alt'), el.title]
     .some(text => typeof text === 'string' && text.trim().toLocaleLowerCase('tr-TR') === 'kapat');
   function closeTargets(doc, visible) {
-    const targets = [...doc.querySelectorAll('button,a,[role="button"],input,div,span,svg text,svg tspan,[aria-label]')]
+    const nodes = [...doc.querySelectorAll('*')];
+    for (let index = 0; index < nodes.length; index++) {
+      if (nodes[index].shadowRoot) nodes.push(...nodes[index].shadowRoot.querySelectorAll('*'));
+    }
+    const targets = nodes
       .filter(el => visible(el) && closeLabel(el))
-      .map(el => el.closest('button,a,[role="button"],[onclick]') || el.closest('g') || el);
+      .map(el => {
+        let target = el.closest('button,a,[role="button"],[onclick],.slide-object,.button') || el.closest('g') || el;
+        // Text overlays often ignore pointer events while their enclosing shape
+        // receives the click. Do not discard the label before finding that shape.
+        while (target.parentElement && getComputedStyle(target).pointerEvents === 'none') target = target.parentElement;
+        return target;
+      }).filter(el => el !== doc.body && el !== doc.documentElement);
     const unique = [...new Set(targets)].filter(el => visible(el) && !blocked(el));
     return unique.filter(el => !unique.some(other => other !== el && other.contains(el)));
   }

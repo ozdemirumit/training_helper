@@ -61,7 +61,6 @@ async function handle(msg, sender) {
     }
   }
   if (msg.type === 'selectNext') await notifyTab(id, {type:'pick'});
-  if (msg.type === 'selectClose') await notifyTab(id, {type:'pickClose'});
   if (msg.type === 'picked') await notifyTab(id, {type:'cancelPick'});
   if (msg.type === 'progress' && session?.running && id === session.tabId && typeof msg.text === 'string') {
     await chrome.tabs.sendMessage(id, {type:'progress', text:msg.text.slice(0,200)}, {frameId:0}).catch(() => {});
