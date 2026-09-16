@@ -247,11 +247,18 @@
         return;
       }
       const bar = EgitimDetector.barInfo(next);
-      const timedArrow = !!bar || next.id === 'gonextImage';
-      const complete = timedArrow ? !!bar && EgitimDetector.barReady(next,bar) : /şimdi sonraki sayfaya ilerleyebilirsiniz/i.test(text);
+      const shineArrow = next.id === 'gonext';
+      const timedArrow = !!bar || next.id === 'gonextImage' || shineArrow;
+      const complete = shineArrow ? EgitimDetector.shineReady(next) : timedArrow ? !!bar && EgitimDetector.barReady(next,bar) : /şimdi sonraki sayfaya ilerleyebilirsiniz/i.test(text);
       const videos = [...document.querySelectorAll('video,audio')].filter(visible);
       const ended = !timedArrow && videos.length > 0 && videos.every(media => media.ended);
-      if ((previousComplete && !complete) || (previousEnded && !ended)) gate.latched = false;
+      if ((!shineArrow && previousComplete && !complete) || (previousEnded && !ended)) gate.latched = false;
+      if (shineArrow && gate.latched) {
+        const shine = next.querySelector('#nextShine');
+        // Opacity changes are the blink animation, not a new lesson.
+        // Re-arm only when the completion marker is explicitly hidden/reset.
+        if (!shine || getComputedStyle(shine).visibility === 'hidden' || getComputedStyle(shine).display === 'none') gate.latched = false;
+      }
       previousComplete = complete; previousEnded = ended;
       // Do not act on assessment screens.
       if ([...document.querySelectorAll('input[type="radio"], [role="radio"]')].some(visible)) { report('Değerlendirme: yanıtınızı kendiniz seçin.'); return; }
@@ -260,7 +267,7 @@
       if (timedArrow) gate.armed = false;
       gate = EgitimDetector.decide(gate, { blocked, selected: explicitlySelected, complete, ended, now: Date.now() });
       if (!gate.click) {
-        if (timedArrow && !complete) { report(bar ? 'Anlatım süresi ve ileri oktaki kırmızı tamamlanma işareti bekleniyor.' : 'İleri oku bulundu (gonextImage); süre ve sayfa sayacı aranıyor.'); return; }
+        if (timedArrow && !complete) { report(shineArrow ? 'İleri düğmesi bulundu — kırmızı nextShine tamamlanma işareti bekleniyor.' : bar ? 'Anlatım süresi ve ileri oktaki kırmızı tamamlanma işareti bekleniyor.' : 'İleri oku bulundu (gonextImage); süre ve sayfa sayacı aranıyor.'); return; }
         report(blocked ? 'İleri düğmesi pasif — anlatımın bitmesi bekleniyor.' : gate.latched ? 'İleri düğmesine tıklandı — yeni sayfa bekleniyor.' : 'İleri düğmesi bulundu — etkinlik/bitiş kontrol ediliyor.');
         return;
       }

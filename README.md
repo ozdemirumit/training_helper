@@ -1,6 +1,6 @@
 # Eğitim İlerletici — Training Helper
 
-Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.3.1**.
+Chrome üzerinde desteklenen eğitim sayfaları ile açılan eğitim penceresi arasında geçişi kolaylaştıran eklenti. Güncel sürüm: **1.3.2**.
 
 ## İndir
 
@@ -20,7 +20,7 @@ Kurulum için Node.js, Python, terminal veya ücretli bir program gerekmez. ZIP'
 4. Sağ üstte **Geliştirici modu** seçeneğini açın.
 5. **Paketlenmemiş öğe yükle** düğmesine basın.
 6. Doğrudan `manifest.json` dosyasını içeren klasörü seçin. ZIP dosyasını seçmeyin. Kaynak ZIP kullandıysanız bu klasör genellikle `training_helper-main` olur.
-7. Eğitim İlerletici kartında **1.3.1** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
+7. Eğitim İlerletici kartında **1.3.2** sürümünü kontrol edin. Site erişimi sorulursa kullandığınız desteklenen eğitim sitesi için izin verin.
 8. Önceden açık olan ana eğitim sayfasını ve eğitim popup'ını yenileyin.
 
 ## Kullanım
@@ -99,6 +99,10 @@ Süre ve sayfa sayacı bulunan alt barda ileri oku sürekli etkin olsa da erken 
 ## Resim biçimindeki ileri oku — 1.3.1
 
 Paylaşılan oynatıcı HTML'ine göre gonextImage kimlikli resim doğrudan ileri oku olarak tanınır. Buton etiketi veya tabindex gerektirmez. Bu oynatıcıda süre ve kırmızı tamamlanma kontrolü korunur; süre/sayaç bulunamazsa erken ilerlemek yerine panelde neden beklendiği gösterilir.
+
+## Yanıp sönen tamamlanma resmi — 1.3.2
+
+Bu oynatıcıda gonext kapsayıcısı tıklanır. Normal gonextImage gizlense bile nextShine resmi görünür olduğunda tamamlanma algılanır. Opaklık animasyonu yeni sayfa sayılmaz; işaret gizlendiğinde hazır durumu sıfırlanır. Bu özel oynatıcıda CSS arka plan rengi yerine gerçek tamamlanma resmi esas alınır.
 
 ## Güncelleme
 

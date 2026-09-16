@@ -142,6 +142,8 @@
     return timerDone(text) && state.red;
   }
   function findBarNext(doc,visible) {
+    const playerControl = doc.querySelector('#gonext');
+    if (playerControl && visible(playerControl)) return playerControl;
     const playerArrow = doc.querySelector('#gonextImage');
     if (playerArrow && visible(playerArrow)) return playerArrow;
     const counters=[...doc.querySelectorAll('span,div,p')].filter(el=>visible(el) && /^\s*\d+\s*\/\s*\d+\s*$/.test(el.textContent || ''));
@@ -156,5 +158,14 @@
     }
     return null;
   }
-  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose, clickPlay, startPlayback, timerDone, redColor, barInfo, barReady, findBarNext };
+  const shineStates = new WeakMap();
+  function shineReady(next) {
+    const shine = next.querySelector('#nextShine');
+    if (!shine || !shine.getClientRects().length) { shineStates.delete(next); return false; }
+    const style = getComputedStyle(shine);
+    if (style.display === 'none' || style.visibility !== 'visible') { shineStates.delete(next); return false; }
+    if (Number(style.opacity) > 0.05) shineStates.set(next,true);
+    return shineStates.get(next) === true;
+  }
+  globalThis.EgitimDetector = { blocked, isNext, hasHint, shortcutHint, decide, contentFinished, congratulations, closeLabel, closeTargets, completionText, clickClose, clickPlay, startPlayback, timerDone, redColor, barInfo, barReady, findBarNext, shineReady };
 })();

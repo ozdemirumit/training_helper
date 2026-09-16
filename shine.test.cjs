@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+require('./detector.js');
+const D=global.EgitimDetector;
+let style={visibility:'visible',display:'block',opacity:'0.9375'};
+global.getComputedStyle=()=>style;
+const shine={getClientRects:()=>[{}]};
+let clicks=0;
+const container={id:'gonext',querySelector:()=>shine,click(){clicks++;}};
+const doc={querySelector:selector=>selector==='#gonext'?container:null};
+assert.equal(D.findBarNext(doc,()=>true),container);
+assert.equal(D.shineReady(container),true);
+style.opacity='0'; assert.equal(D.shineReady(container),true,'blink must not clear completion');
+style.visibility='hidden'; assert.equal(D.shineReady(container),false,'new slide hides marker');
+style.visibility='visible'; assert.equal(D.shineReady(container),false,'zero opacity without prior signal waits');
+style.opacity='0.9'; assert.equal(D.shineReady(container),true);
+D.findBarNext(doc,()=>true).click(); assert.equal(clicks,1);
+console.log('gonext container and nextShine blinking completion checks passed');
