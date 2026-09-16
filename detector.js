@@ -142,6 +142,8 @@
     return timerDone(text) && state.red;
   }
   function findBarNext(doc,visible) {
+    const playerArrow = doc.querySelector('#gonextImage');
+    if (playerArrow && visible(playerArrow)) return playerArrow;
     const counters=[...doc.querySelectorAll('span,div,p')].filter(el=>visible(el) && /^\s*\d+\s*\/\s*\d+\s*$/.test(el.textContent || ''));
     for(const counter of counters) {
       const box=counter.getBoundingClientRect();

@@ -19,3 +19,6 @@ bar.innerText='00:00 / 01:39 5 / 22';
 assert.equal(D.barReady(next,bar),false,'new page resets completion');
 assert.equal(D.timerDone('00:00 / 00:00'),false);
 console.log('Timed red-arrow completion checks passed');
+const imageArrow={id:'gonextImage',tagName:'IMG',title:'Sonraki Sayfaya Git'};
+assert.equal(D.findBarNext({querySelector:selector=>selector==='#gonextImage'?imageArrow:null},()=>true),imageArrow,'image navigation recognized without button role or tabindex');
+assert.equal(D.findBarNext({querySelector:()=>imageArrow,querySelectorAll:()=>[]},()=>false),null,'hidden arrow ignored');

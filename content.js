@@ -247,19 +247,20 @@
         return;
       }
       const bar = EgitimDetector.barInfo(next);
-      const complete = bar ? EgitimDetector.barReady(next,bar) : /şimdi sonraki sayfaya ilerleyebilirsiniz/i.test(text);
+      const timedArrow = !!bar || next.id === 'gonextImage';
+      const complete = timedArrow ? !!bar && EgitimDetector.barReady(next,bar) : /şimdi sonraki sayfaya ilerleyebilirsiniz/i.test(text);
       const videos = [...document.querySelectorAll('video,audio')].filter(visible);
-      const ended = !bar && videos.length > 0 && videos.every(media => media.ended);
+      const ended = !timedArrow && videos.length > 0 && videos.every(media => media.ended);
       if ((previousComplete && !complete) || (previousEnded && !ended)) gate.latched = false;
       previousComplete = complete; previousEnded = ended;
       // Do not act on assessment screens.
       if ([...document.querySelectorAll('input[type="radio"], [role="radio"]')].some(visible)) { report('Değerlendirme: yanıtınızı kendiniz seçin.'); return; }
       const blocked = disabled(next);
-      const explicitlySelected = !bar && (chosen === next || (!!selector && next.matches(selector)));
-      if (bar) gate.armed = false;
+      const explicitlySelected = !timedArrow && (chosen === next || (!!selector && next.matches(selector)));
+      if (timedArrow) gate.armed = false;
       gate = EgitimDetector.decide(gate, { blocked, selected: explicitlySelected, complete, ended, now: Date.now() });
       if (!gate.click) {
-        if (bar && !complete) { report('Anlatım süresi ve ileri oktaki kırmızı tamamlanma işareti bekleniyor.'); return; }
+        if (timedArrow && !complete) { report(bar ? 'Anlatım süresi ve ileri oktaki kırmızı tamamlanma işareti bekleniyor.' : 'İleri oku bulundu (gonextImage); süre ve sayfa sayacı aranıyor.'); return; }
         report(blocked ? 'İleri düğmesi pasif — anlatımın bitmesi bekleniyor.' : gate.latched ? 'İleri düğmesine tıklandı — yeni sayfa bekleniyor.' : 'İleri düğmesi bulundu — etkinlik/bitiş kontrol ediliyor.');
         return;
       }
